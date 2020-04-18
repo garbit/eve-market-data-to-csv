@@ -80,6 +80,8 @@ async function combineData(requests) {
     items.push(getMarketDataByTypeId(item.id));
   });
 
+  console.log('Starting import');
+
   let rows = await Promise.all(items).then((result) => {
     let rows = Array.prototype.concat.apply([], result);
     const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
