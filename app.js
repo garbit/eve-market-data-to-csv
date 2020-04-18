@@ -3,6 +3,22 @@ const axios = require('axios');
 const fs = require('fs');
 const dateFormat = require('dateformat');
 
+function filterNullSecStations(stationName){
+  let nameParts = stationName.split(" - ");
+
+ // console.log(nameParts);
+
+  if (nameParts[0].indexOf('-') > -1)
+  {
+    console.log("Null Sec Station");
+  }
+  else {
+    console.log("Not Null Sec Station");
+  }
+
+  //console.log(nameParts);
+}
+
 async function getMarketDataByTypeId(id) {
   console.log('*************');
   console.log(`Importing item_id ${id}`);
