@@ -3,20 +3,19 @@ const axios = require('axios');
 const fs = require('fs');
 const dateFormat = require('dateformat');
 
-function filterNullSecStations(stationName){
+function isNullsecStation(stationName){
   let nameParts = stationName.split(" - ");
 
  // console.log(nameParts);
 
   if (nameParts[0].indexOf('-') > -1)
   {
-    console.log("Null Sec Station");
+    return true;
   }
   else {
-    console.log("Not Null Sec Station");
+    return false;
   }
 
-  //console.log(nameParts);
 }
 
 async function getMarketDataByTypeId(id) {
@@ -48,6 +47,15 @@ async function getMarketDataByTypeId(id) {
   item_sale.name = data.type.name;
 
   let rows = [];
+
+  // new bit
+  for(let i = 0; i < data.sell.length; i++) {
+    let record = data.sell[i];
+    if (isNullsecStation(record.station.name)) {
+      data.sell.slice(i,1);
+    }
+  }
+
 
   if(data.sell.length > 0) {
     if(data.sell.length >= 5) {
