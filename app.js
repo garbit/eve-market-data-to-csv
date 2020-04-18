@@ -19,6 +19,28 @@ function isNullsecStation(stationName){
 
 }
 
+async function getMarketHistoryData(regionId, itemId) {
+  var data = null;
+  try {
+    var data = await axios.get(`https://esi.evetech.net/v1/markets/${regionId}/history/?type_id=${itemId}`);
+  }
+  catch(e) {
+    console.log(e);
+    return [];
+  }
+  data = JSON.parse(data.data);
+
+  var averageOverTenDays = [];
+
+  //console.log(data);
+
+  //var test = data.length
+  //console.log(test)
+  averageOverTenDays = data.slice(data.length - 11, 10);
+
+  return averageOverTenDays;
+}
+
 async function getMarketDataByTypeId(id) {
   var data = null;
   try {
@@ -95,24 +117,26 @@ async function getMarketDataByTypeId(id) {
 
 // fetch data
 (async () => {
-  console.log('Starting import');
+  console.log(await getMarketHistoryData("10000002","3683"));
+  
+  //console.log('Starting import')
 
-  let items = config.items;
-  let requests = [];
+  // let items = config.items;
+  // let requests = [];
 
-  items.forEach((item) => {
-    requests.push(getMarketDataByTypeId(item.id));
-  });
+  // items.forEach((item) => {
+  //   requests.push(getMarketDataByTypeId(item.id));
+  // });
 
-  let rows = await Promise.all(requests).then((results) => {
-    let rows = Array.prototype.concat.apply([], results);
-    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
+  // let rows = await Promise.all(requests).then((results) => {
+  //   let rows = Array.prototype.concat.apply([], results);
+  //   const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
-    const json2csvParser = new Parser({ fields });
-    let csv = json2csvParser.parse(rows)
-    let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
-    fs.writeFileSync(`exports/${filename}.csv`, csv);
-    console.log(`Imported ${rows.length} rows`);
-    console.log(`Output: exports/${filename}.csv`);
-  });
+  //   const json2csvParser = new Parser({ fields });
+  //   let csv = json2csvParser.parse(rows)
+  //   let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
+  //   fs.writeFileSync(`exports/${filename}.csv`, csv);
+  //   console.log(`Imported ${rows.length} rows`);
+  //   console.log(`Output: exports/${filename}.csv`);
+  // });
 })();
