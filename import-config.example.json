@@ -1,6 +1,7 @@
 {
   "excludeNullsec": false,
   "comparisonRegion": "10000002",
+  "openFile": true,
   "items": [
     {
       "name": "Enriched Uranium",

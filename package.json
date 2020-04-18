@@ -20,6 +20,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "dateformat": "^3.0.3",
-    "json2csv": "^5.0.0"
+    "json2csv": "^5.0.0",
+    "node-run-cmd": "^1.0.1"
   }
 }

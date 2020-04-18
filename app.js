@@ -2,6 +2,7 @@ const { Parser } = require('json2csv');
 const axios = require('axios');
 const fs = require('fs');
 const dateFormat = require('dateformat');
+const nrc = require('node-run-cmd');
 let config = JSON.parse(fs.readFileSync('import-config.json'));
 
 function isNullsecStation(stationName){
@@ -154,5 +155,11 @@ async function getMarketDataByTypeId(id) {
     fs.writeFileSync(`exports/${filename}.csv`, csv);
     console.log(`Imported ${rows.length} rows`);
     console.log(`Output: exports/${filename}.csv`);
+
+    if(config.openFile) {
+      console.log('Opening File...');
+      nrc.run(`libreoffice exports/${filename}.csv`);
+    }
+
   });
 })();
