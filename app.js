@@ -19,10 +19,6 @@ function isNullsecStation(stationName){
   }
 }
 
-function formatNumber(num) {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\,')
-}
-
 async function getMarketHistoryData(regionId, itemId) {
   var data = null;
   try {
@@ -111,10 +107,10 @@ async function getMarketDataByTypeId(id) {
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
           "volume_remain": record.volume_remain,
-          "price": formatNumber(record.price),
+          "price": record.price,
           "percentage_decrease": pcDecrease,
           "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
-          "average_price": formatNumber(outputAverage),
+          "average_price": outputAverage,
           "region": record.region.name,
           "station": record.station.name,
         });
