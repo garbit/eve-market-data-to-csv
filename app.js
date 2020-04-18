@@ -28,15 +28,13 @@ async function getMarketHistoryData(regionId, itemId) {
     console.log(e);
     return [];
   }
-  data = JSON.parse(data.data);
+  data = data.data;
 
   var averageOverTenDays = [];
 
-  //console.log(data);
-
-  //var test = data.length
-  //console.log(test)
-  averageOverTenDays = data.slice(data.length - 11, 10);
+  for(let i = data.length - 10; i < data.length; i++) {
+    averageOverTenDays.push(data[i]);
+  }
 
   return averageOverTenDays;
 }
@@ -118,7 +116,7 @@ async function getMarketDataByTypeId(id) {
 // fetch data
 (async () => {
   console.log(await getMarketHistoryData("10000002","3683"));
-  
+
   //console.log('Starting import')
 
   // let items = config.items;
