@@ -93,8 +93,10 @@ async function getMarketDataByTypeId(id) {
         let record = sales[i];
 
         let averagePrice = "";
+        let pcDecrease = "";
         if(i == 0) {
           averagePrice = await getMarketHistoryData(config.comparisonRegion, record.type_id);
+          pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
         }
 
         rows.push({
@@ -102,6 +104,7 @@ async function getMarketDataByTypeId(id) {
           "volume_entered": record.volume_entered,
           "volume_remain": record.volume_remain,
           "price": record.price,
+          "percentage_decrease": pcDecrease,
           "average_price": averagePrice,
           "region": record.region.name,
           "station": record.station.name,
@@ -111,14 +114,18 @@ async function getMarketDataByTypeId(id) {
     else {
       let record = sales[0];
       let averagePrice = "";
+      let pcDecrease = "";
       if(i == 0) {
         await getMarketHistoryData(config.comparisonRegion, record.type_id);
+        pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
       }
+
       rows.push({
         "name": item_sale.name,
         "volume_entered": record.volume_entered,
         "volume_remain": record.volume_remain,
         "price": record.price,
+        "percentage_decrease": pcDecrease,
         "average_price": averagePrice,
         "region": record.region.name,
         "station": record.station.name,
@@ -147,7 +154,7 @@ async function getMarketDataByTypeId(id) {
 
   let rows = await Promise.all(requests).then((results) => {
     let rows = Array.prototype.concat.apply([], results);
-    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'average_price', 'region', 'station'];
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'percentage_decrease', 'average_price', 'region', 'station'];
 
     const json2csvParser = new Parser({ fields });
     let csv = json2csvParser.parse(rows)
