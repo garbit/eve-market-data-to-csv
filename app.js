@@ -151,7 +151,7 @@ async function getMarketDataByTypeId(id) {
 
     const json2csvParser = new Parser({ fields });
     let csv = json2csvParser.parse(rows)
-    let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
+    let filename = dateFormat(new Date(), "yyyy-mm-dd-hh:MM:ss");
     fs.writeFileSync(`exports/${filename}.csv`, csv);
     console.log(`Imported ${rows.length} rows`);
     console.log(`Output: exports/${filename}.csv`);
