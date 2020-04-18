@@ -1,0 +1,25 @@
+{
+  "name": "eve-market-data-to-csv",
+  "version": "1.0.0",
+  "description": "A tool for parsing evemarketer json data into csv files",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/garbit/eve-market-data-to-csv.git"
+  },
+  "author": "Andrew Garbett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/garbit/eve-market-data-to-csv/issues"
+  },
+  "homepage": "https://github.com/garbit/eve-market-data-to-csv#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dateformat": "^3.0.3",
+    "json2csv": "^5.0.0"
+  }
+}
