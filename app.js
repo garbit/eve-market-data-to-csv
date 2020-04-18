@@ -107,6 +107,7 @@ async function getMarketDataByTypeId(id) {
           "volume_remain": record.volume_remain,
           "price": record.price,
           "percentage_decrease": pcDecrease,
+          "potential_profit": (averagePrice - record.price) * record.volume_remain,
           "average_price": outputAverage,
           "region": record.region.name,
           "station": record.station.name,
@@ -136,7 +137,7 @@ async function getMarketDataByTypeId(id) {
 
   let rows = await Promise.all(requests).then((results) => {
     let rows = Array.prototype.concat.apply([], results);
-    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'percentage_decrease', 'average_price', 'region', 'station'];
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'percentage_decrease', 'potential_profit', 'average_price', 'region', 'station'];
 
     const json2csvParser = new Parser({ fields });
     let csv = json2csvParser.parse(rows)
