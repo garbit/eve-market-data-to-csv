@@ -32,10 +32,13 @@ async function getMarketHistoryData(regionId, itemId) {
 
   let days = 10;
 
+  if(data.length < days) {
+    return "Not Enough Data";
+  }
+
   let addedAverage = 0;
   for(let i = data.length - days; i < data.length; i++) {
     addedAverage += data[i].average;
-
   }
   addedAverage = addedAverage / days;
 
@@ -88,9 +91,9 @@ async function getMarketDataByTypeId(id) {
       for(let i = 0; i < 5; i++) {
         let record = sales[i];
 
+        let averagePrice = "";
         if(i == 0) {
-          console.log(await getMarketHistoryData(record.region_id, record.type_id));
-
+          averagePrice = await getMarketHistoryData(config.comparisonRegion, record.type_id);
         }
 
         rows.push({
@@ -98,6 +101,7 @@ async function getMarketDataByTypeId(id) {
           "volume_entered": record.volume_entered,
           "volume_remain": record.volume_remain,
           "price": record.price,
+          "average_price": averagePrice,
           "region": record.region.name,
           "station": record.station.name,
         });
@@ -105,14 +109,19 @@ async function getMarketDataByTypeId(id) {
     }
     else {
       let record = sales[0];
-        rows.push({
-          "name": item_sale.name,
-          "volume_entered": record.volume_entered,
-          "volume_remain": record.volume_remain,
-          "price": record.price,
-          "region": record.region.name,
-          "station": record.station.name,
-        });
+      let averagePrice = "";
+      if(i == 0) {
+        await getMarketHistoryData(config.comparisonRegion, record.type_id);
+      }
+      rows.push({
+        "name": item_sale.name,
+        "volume_entered": record.volume_entered,
+        "volume_remain": record.volume_remain,
+        "price": record.price,
+        "average_price": averagePrice,
+        "region": record.region.name,
+        "station": record.station.name,
+      });
     }
   }
   else {
@@ -137,7 +146,7 @@ async function getMarketDataByTypeId(id) {
 
   let rows = await Promise.all(requests).then((results) => {
     let rows = Array.prototype.concat.apply([], results);
-    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'average_price', 'region', 'station'];
 
     const json2csvParser = new Parser({ fields });
     let csv = json2csvParser.parse(rows)
