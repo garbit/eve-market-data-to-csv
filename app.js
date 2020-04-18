@@ -20,7 +20,6 @@ async function getMarketDataByTypeId(id) {
 
   // item id, name, price, region, system, station
   let item_sale = {
-    item_id: "",
     name: "",
     volume_entered: "",
     volume_remain: "",
@@ -36,10 +35,9 @@ async function getMarketDataByTypeId(id) {
 
   if(data.sell.length > 0) {
     if(data.sell.length >= 5) {
-      for(let i = 0; i < 6; i++) {
+      for(let i = 0; i < 5; i++) {
         let record = data.sell[i];
         rows.push({
-          "item_id" : item_sale.item_id,
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
           "volume_remain": record.volume_remain,
@@ -48,6 +46,17 @@ async function getMarketDataByTypeId(id) {
           "station": record.station.name,
         });
       }
+    }
+    else {
+      let record = data.sell[0];
+        rows.push({
+          "name": item_sale.name,
+          "volume_entered": record.volume_entered,
+          "volume_remain": record.volume_remain,
+          "price": record.price,
+          "region": record.region.name,
+          "station": record.station.name,
+        });
     }
   }
   else {
@@ -67,7 +76,7 @@ async function getMarketDataByTypeId(id) {
   //   rows.push(await getMarketDataByTypeId(typeIds[index]));
   // }
 
-  const fields = ['item_id', 'name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
+  const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
   const json2csvParser = new Parser({ fields });
   let csv = json2csvParser.parse(rows)
