@@ -3,9 +3,19 @@ const axios = require('axios');
 const fs = require('fs');
 const dateFormat = require('dateformat');
 
-// fetch data
-(async () => {
-  var data = await axios.get('https://evemarketer.com/api/v1/markets/types/16638?language=en');
+async function getMarketDataByTypeId(id) {
+  console.log('*************');
+  console.log(`Importing item_id ${id}`);
+  console.log('*************');
+  var data = null;
+  try {
+    var data = await axios.get(`https://evemarketer.com/api/v1/markets/types/${id}?language=en`);
+  }
+  catch(e) {
+    console.log(e);
+    return [];
+  }
+
   data = data.data;
 
   // item id, name, price, region, system, station
@@ -40,6 +50,22 @@ const dateFormat = require('dateformat');
       }
     }
   }
+  else {
+    console.log('No market data available');
+  }
+
+  return rows;
+}
+
+// fetch data
+(async () => {
+
+  let typeIds = ["16638", "16637"];
+  // let rows = [];
+  let rows = await getMarketDataByTypeId("16638");
+  // for (index = 0; index < typeIds.length; ++index) {
+  //   rows.push(await getMarketDataByTypeId(typeIds[index]));
+  // }
 
   const fields = ['item_id', 'name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
