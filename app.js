@@ -30,13 +30,16 @@ async function getMarketHistoryData(regionId, itemId) {
   }
   data = data.data;
 
-  var averageOverTenDays = [];
+  let days = 10;
 
-  for(let i = data.length - 10; i < data.length; i++) {
-    averageOverTenDays.push(data[i]);
+  let addedAverage = 0;
+  for(let i = data.length - days; i < data.length; i++) {
+    addedAverage += data[i].average;
+
   }
+  addedAverage = addedAverage / days;
 
-  return averageOverTenDays;
+  return addedAverage;
 }
 
 async function getMarketDataByTypeId(id) {
@@ -84,6 +87,12 @@ async function getMarketDataByTypeId(id) {
     if(sales.length >= 5) {
       for(let i = 0; i < 5; i++) {
         let record = sales[i];
+
+        if(i == 0) {
+          console.log(await getMarketHistoryData(record.region_id, record.type_id));
+
+        }
+
         rows.push({
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
@@ -115,26 +124,26 @@ async function getMarketDataByTypeId(id) {
 
 // fetch data
 (async () => {
-  console.log(await getMarketHistoryData("10000002","3683"));
+  //console.log(await getMarketHistoryData("10000002","3683"));
 
   //console.log('Starting import')
 
-  // let items = config.items;
-  // let requests = [];
+  let items = config.items;
+  let requests = [];
 
-  // items.forEach((item) => {
-  //   requests.push(getMarketDataByTypeId(item.id));
-  // });
+  items.forEach((item) => {
+    requests.push(getMarketDataByTypeId(item.id));
+  });
 
-  // let rows = await Promise.all(requests).then((results) => {
-  //   let rows = Array.prototype.concat.apply([], results);
-  //   const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
+  let rows = await Promise.all(requests).then((results) => {
+    let rows = Array.prototype.concat.apply([], results);
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
-  //   const json2csvParser = new Parser({ fields });
-  //   let csv = json2csvParser.parse(rows)
-  //   let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
-  //   fs.writeFileSync(`exports/${filename}.csv`, csv);
-  //   console.log(`Imported ${rows.length} rows`);
-  //   console.log(`Output: exports/${filename}.csv`);
-  // });
+    const json2csvParser = new Parser({ fields });
+    let csv = json2csvParser.parse(rows)
+    let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
+    fs.writeFileSync(`exports/${filename}.csv`, csv);
+    console.log(`Imported ${rows.length} rows`);
+    console.log(`Output: exports/${filename}.csv`);
+  });
 })();
