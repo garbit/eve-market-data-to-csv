@@ -2,6 +2,7 @@ const { Parser } = require('json2csv');
 const axios = require('axios');
 const fs = require('fs');
 const dateFormat = require('dateformat');
+let config = JSON.parse(fs.readFileSync('import-config.json'));
 
 function isNullsecStation(stationName){
   let nameParts = stationName.split(" - ");
@@ -19,9 +20,6 @@ function isNullsecStation(stationName){
 }
 
 async function getMarketDataByTypeId(id) {
-  console.log('*************');
-  console.log(`Importing item_id ${id}`);
-  console.log('*************');
   var data = null;
   try {
     var data = await axios.get(`https://evemarketer.com/api/v1/markets/types/${id}?language=en`);
@@ -47,20 +45,22 @@ async function getMarketDataByTypeId(id) {
   item_sale.name = data.type.name;
 
   let rows = [];
+  let sales = [];
 
-  // new bit
-  for(let i = 0; i < data.sell.length; i++) {
-    let record = data.sell[i];
-    if (isNullsecStation(record.station.name)) {
-      data.sell.slice(i,1);
+  if(config.excludeNullsec) {
+    // create an array of sales that are not in null sec
+    for(let i = 0; i < data.sell.length; i++) {
+      let record = data.sell[i];
+      if (!isNullsecStation(record.station.name)) {
+        sales.push(record);
+      }
     }
   }
 
-
-  if(data.sell.length > 0) {
-    if(data.sell.length >= 5) {
+  if(sales.length > 0) {
+    if(sales.length >= 5) {
       for(let i = 0; i < 5; i++) {
-        let record = data.sell[i];
+        let record = sales[i];
         rows.push({
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
@@ -72,7 +72,7 @@ async function getMarketDataByTypeId(id) {
       }
     }
     else {
-      let record = data.sell[0];
+      let record = sales[0];
         rows.push({
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
@@ -90,30 +90,26 @@ async function getMarketDataByTypeId(id) {
   return rows;
 }
 
-async function combineData(requests) {
-  return await Promise.all(requests);
-}
-
 // fetch data
 (async () => {
-
-  let typeIds = JSON.parse(fs.readFileSync('import-config.json'));
-  let items = [];
-
-  typeIds.forEach((item) => {
-    items.push(getMarketDataByTypeId(item.id));
-  });
-
   console.log('Starting import');
 
-  let rows = await Promise.all(items).then((result) => {
-    let rows = Array.prototype.concat.apply([], result);
+  let items = config.items;
+  let requests = [];
+
+  items.forEach((item) => {
+    requests.push(getMarketDataByTypeId(item.id));
+  });
+
+  let rows = await Promise.all(requests).then((results) => {
+    let rows = Array.prototype.concat.apply([], results);
     const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
     const json2csvParser = new Parser({ fields });
     let csv = json2csvParser.parse(rows)
     let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
     fs.writeFileSync(`exports/${filename}.csv`, csv);
-
+    console.log(`Imported ${rows.length} rows`);
+    console.log(`Output: exports/${filename}.csv`);
   });
 })();
