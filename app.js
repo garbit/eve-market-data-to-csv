@@ -113,7 +113,7 @@ async function getMarketDataByTypeId(id) {
           "volume_remain": record.volume_remain,
           "price": formatNumber(record.price),
           "percentage_decrease": pcDecrease,
-          "potential_profit": formatNumber((averagePrice - record.price) * record.volume_remain),
+          "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
           "average_price": formatNumber(outputAverage),
           "region": record.region.name,
           "station": record.station.name,
