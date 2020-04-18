@@ -56,6 +56,9 @@ async function getMarketDataByTypeId(id) {
       }
     }
   }
+  else {
+    sales = data.sell;
+  }
 
   if(sales.length > 0) {
     if(sales.length >= 5) {
