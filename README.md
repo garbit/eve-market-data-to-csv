@@ -4,8 +4,26 @@ This tool allows you to retrieve JSON data from evemarketer and convert the data
 ## Install
 Install the required packages using ```npm```:
 1. ```npm install```
-2. ```npm run start```
-3. ```Profit```
+2. Create ```import-config.json``` file and add your items + ids you wish to import (see below)
+3. ```npm run start```
+4. ```Profit```
+
+## Define items to import
+You must create an ```import-config.json``` (use the import-config.example.json file for a reference) to add items to define which items you wish to import.
+
+The file is an array of JSON objects with name, type id:
+```
+[
+  {
+    "name": "Tungsten",
+    "id": "16637"
+  },
+  {
+    "name": "Titanium,
+    "id": "16638"
+  }
+]
+```
 
 ## Example file output
 |  "item_id"| "name"" | ""volume_entered"" | ""volume_remain"" | ""price"" | ""region"" | ""station"

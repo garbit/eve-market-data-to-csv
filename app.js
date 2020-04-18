@@ -66,21 +66,26 @@ async function getMarketDataByTypeId(id) {
   return rows;
 }
 
+async function combineData(requests) {
+  return await Promise.all(requests);
+}
+
 // fetch data
 (async () => {
 
   let typeIds = ["16638", "16637"];
-  // let rows = [];
-  let rows = await getMarketDataByTypeId("16638");
-  // for (index = 0; index < typeIds.length; ++index) {
-  //   rows.push(await getMarketDataByTypeId(typeIds[index]));
-  // }
 
-  const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
+  let rows = await Promise.all([
+    getMarketDataByTypeId("16638"),
+    getMarketDataByTypeId("16637")
+  ]).then((result) => {
+    let rows = Array.prototype.concat.apply([], result);
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
-  const json2csvParser = new Parser({ fields });
-  let csv = json2csvParser.parse(rows)
-  let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
-  fs.writeFileSync(`exports/${filename}.csv`, csv);
+    const json2csvParser = new Parser({ fields });
+    let csv = json2csvParser.parse(rows)
+    let filename = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
+    fs.writeFileSync(`exports/${filename}.csv`, csv);
 
+  });
 })();
