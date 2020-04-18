@@ -73,12 +73,14 @@ async function combineData(requests) {
 // fetch data
 (async () => {
 
-  let typeIds = ["16638", "16637"];
+  let typeIds = JSON.parse(fs.readFileSync('import-config.json'));
+  let items = [];
 
-  let rows = await Promise.all([
-    getMarketDataByTypeId("16638"),
-    getMarketDataByTypeId("16637")
-  ]).then((result) => {
+  typeIds.forEach((item) => {
+    items.push(getMarketDataByTypeId(item.id));
+  });
+
+  let rows = await Promise.all(items).then((result) => {
     let rows = Array.prototype.concat.apply([], result);
     const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'region', 'station'];
 
