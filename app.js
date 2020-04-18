@@ -89,15 +89,17 @@ async function getMarketDataByTypeId(id) {
 
   if(sales.length > 0) {
     if(sales.length >= 5) {
+      let averagePrice = await getMarketHistoryData(config.comparisonRegion, sales[0].type_id);
       for(let i = 0; i < 5; i++) {
         let record = sales[i];
 
-        let averagePrice = "";
         let pcDecrease = "";
-        if(i == 0) {
-          averagePrice = await getMarketHistoryData(config.comparisonRegion, record.type_id);
-          pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
+        let outputAverage = averagePrice;
+        if(i > 0) {
+          outputAverage = "";
         }
+
+        pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
 
         rows.push({
           "name": item_sale.name,
@@ -105,31 +107,11 @@ async function getMarketDataByTypeId(id) {
           "volume_remain": record.volume_remain,
           "price": record.price,
           "percentage_decrease": pcDecrease,
-          "average_price": averagePrice,
+          "average_price": outputAverage,
           "region": record.region.name,
           "station": record.station.name,
         });
       }
-    }
-    else {
-      let record = sales[0];
-      let averagePrice = "";
-      let pcDecrease = "";
-      if(i == 0) {
-        await getMarketHistoryData(config.comparisonRegion, record.type_id);
-        pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
-      }
-
-      rows.push({
-        "name": item_sale.name,
-        "volume_entered": record.volume_entered,
-        "volume_remain": record.volume_remain,
-        "price": record.price,
-        "percentage_decrease": pcDecrease,
-        "average_price": averagePrice,
-        "region": record.region.name,
-        "station": record.station.name,
-      });
     }
   }
   else {
