@@ -17,7 +17,10 @@ function isNullsecStation(stationName){
   else {
     return false;
   }
+}
 
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\,')
 }
 
 async function getMarketHistoryData(regionId, itemId) {
@@ -90,6 +93,9 @@ async function getMarketDataByTypeId(id) {
   if(sales.length > 0) {
     if(sales.length >= 5) {
       let averagePrice = await getMarketHistoryData(config.comparisonRegion, sales[0].type_id);
+
+
+
       for(let i = 0; i < 5; i++) {
         let record = sales[i];
 
@@ -105,10 +111,10 @@ async function getMarketDataByTypeId(id) {
           "name": item_sale.name,
           "volume_entered": record.volume_entered,
           "volume_remain": record.volume_remain,
-          "price": record.price,
+          "price": formatNumber(record.price),
           "percentage_decrease": pcDecrease,
-          "potential_profit": (averagePrice - record.price) * record.volume_remain,
-          "average_price": outputAverage,
+          "potential_profit": formatNumber((averagePrice - record.price) * record.volume_remain),
+          "average_price": formatNumber(outputAverage),
           "region": record.region.name,
           "station": record.station.name,
         });
