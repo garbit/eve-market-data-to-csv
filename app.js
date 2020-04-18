@@ -52,7 +52,7 @@ async function getMarketDataByTypeId(id) {
   for(let i = 0; i < data.sell.length; i++) {
     let record = data.sell[i];
     if (isNullsecStation(record.station.name)) {
-      data.sell.slice(i,1);
+      data.sell.splice(i,1);
     }
   }
 
