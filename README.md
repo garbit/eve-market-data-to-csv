@@ -1,5 +1,7 @@
 # About
-This tool allows you to retrieve JSON data from evemarketer and convert the data into csv. The tool selects the top 5 lowest value sells along with market volume and pricing information. Historic market data is retrieved for each item to calculate possible percentage profit given a regional average of your trading area i.e. Jita.
+This tool allows you to retrieve the top 5 lowest value sell order for a given item along with market volume and pricing information. The tool also uses historic market data (last 10 days) to calculate possible percentage profit given a regional average of your trading area i.e. Jita.
+
+The tool retrieves JSON data from evemarketer.com and evetech.net for pricing and historic market data and converts the output to a formatted csv file.
 
 ## Install
 Install the required packages using ```npm```:
