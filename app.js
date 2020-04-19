@@ -90,39 +90,36 @@ async function getMarketDataByTypeId(id) {
   }
 
   // if we have sales and sales.length > 5 then process the pricing data
-  if(sales.length > 0) {
-    if(sales.length >= 5) {
+  if(sales.length >= 5) {
+    // retrieve market history for item by the "comparison region" that has been set in the import-config.json
+    let averagePrice = await getMarketHistoryData(config.comparisonRegion, sales[0].type_id);
 
-      // retrieve market history for item by the "comparison region" that has been set in the import-config.json
-      let averagePrice = await getMarketHistoryData(config.comparisonRegion, sales[0].type_id);
+    // loop over 5 results from sales data
+    for(let i = 0; i < 5; i++) {
+      let record = sales[i];
 
-      // loop over 5 results from sales data
-      for(let i = 0; i < 5; i++) {
-        let record = sales[i];
+      let pcDecrease = "";
+      let outputAverage = averagePrice;
 
-        let pcDecrease = "";
-        let outputAverage = averagePrice;
-
-        if(i > 0) {
-          outputAverage = "";
-        }
-
-        // calculate percentage decrease of an item for sale against the average price of our item in our comparison region
-        pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
-
-        // update rows to add to csv
-        rows.push({
-          "name": item_sale.name,
-          "volume_entered": record.volume_entered,
-          "volume_remain": record.volume_remain,
-          "price": record.price,
-          "percentage_decrease": pcDecrease,
-          "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
-          "average_price": outputAverage,
-          "region": record.region.name,
-          "station": record.station.name,
-        });
+      if(i > 0) {
+        outputAverage = "";
       }
+
+      // calculate percentage decrease of an item for sale against the average price of our item in our comparison region
+      pcDecrease = `${(((averagePrice - record.price) / averagePrice) * 100).toFixed(2)}%`;
+
+      // update rows to add to csv
+      rows.push({
+        "name": item_sale.name,
+        "volume_entered": record.volume_entered,
+        "volume_remain": record.volume_remain,
+        "price": record.price,
+        "percentage_decrease": pcDecrease,
+        "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
+        "average_price": outputAverage,
+        "region": record.region.name,
+        "station": record.station.name,
+      });
     }
   }
   else {
