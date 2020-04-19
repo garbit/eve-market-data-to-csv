@@ -1,5 +1,5 @@
 # About
-This tool allows you to retrieve the top 5 lowest value sell order for a given item along with market volume and pricing information. The tool also uses historic market data (last 10 days) to calculate possible percentage profit given a regional average of your trading area i.e. Jita.
+This tool allows you to retrieve the five lowest sell orders for a given item along with market volume and pricing information. The tool also uses historic market data over the previous 10 days to calculate possible percentage profit given a regional average of your trading area i.e. Jita.
 
 The tool retrieves JSON data from [evemarketer.com](http://evemarketer.com/) and [evetech.net](https://esi.evetech.net) for pricing and historic market data and converts the output to a formatted csv file.
 
