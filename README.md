@@ -49,3 +49,11 @@ The file is an array of JSON objects with name, type id:
 | Enriched Uranium | 2997 | 2997 | 11,200 | 10.05% | 3,749,247 | 12,451 | Providence | R3-K7K - Bartertown |
 | Enriched Uranium | 140 | 140 | 11,500 | 7.64% | 133,140 | 12,451 | Verge Vendor | Alenia IV - Moon 3 - Quafe Company School |
 | Enriched Uranium | 2230 | 2230 | 11,750 | 5.63% | 1,563,230 | 12,451 | Verge Vendor | Jufvitte IX - Aliastra Warehouse |
+
+## Apis
+This script uses two APIs to retrieve pricing data:
+
+| API | Usage | Description |
+|-----|------|-------------|
+| ```https://esi.evetech.net/v1/markets``` | Market History Data | For calculating previous market data average over last 10 days |
+| ```https://evemarketer.com/api/v1/markets/``` | Pricing data for individual items | Shows lowest current sell orders available for any given item |
