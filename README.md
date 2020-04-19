@@ -10,7 +10,7 @@ Install the required packages using ```npm```:
 3. ```npm run start```
 4. ```Profit```
 
-## Define items to import
+## Import Config
 You must create an ```import-config.json``` (use the import-config.example.json file for a reference) to add items to define which items you wish to import.
 
 | Option | Values | Description |
