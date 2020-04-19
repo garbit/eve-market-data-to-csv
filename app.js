@@ -148,7 +148,7 @@ async function getMarketDataByTypeId(id) {
     let rows = Array.prototype.concat.apply([], results);
 
     // specify headers of the csv file
-    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'percentage_decrease', 'potential_profit', 'average_price', 'region', 'station'];
+    const fields = ['name', 'volume_entered', 'volume_remain', 'price', 'average_price', 'percentage_decrease', 'potential_profit', 'region', 'station'];
     const json2csvParser = new Parser({ fields });
 
     // Parse the json data into csv
