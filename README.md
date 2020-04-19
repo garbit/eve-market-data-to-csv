@@ -11,26 +11,41 @@ Install the required packages using ```npm```:
 ## Define items to import
 You must create an ```import-config.json``` (use the import-config.example.json file for a reference) to add items to define which items you wish to import.
 
+| Option | Values | Description |
+|--------|--------|-------------|
+| excludeNullSec (boolean) | [true, false] | Allows user to exclude / include NullSec stations from the results list |
+| comparisonRegion (string) | Region_id (i.e. 10000002) [String] | Uses region average to create price comparison / average profit / loss available for each item in list |
+| openFile | [true, false] | Opens csv in LibreOffice after each ```npm run start``` command |
+| items (array) | ```{   "name": "item Name", "id": "TypeId" }``` - (i.e. https://evemarketer.com/types/28268) | Specifies which items you wish to query on |
+
 The file is an array of JSON objects with name, type id:
 ```
-[
-  {
-    "name": "Tungsten",
-    "id": "16637"
-  },
-  {
-    "name": "Titanium,
-    "id": "16638"
-  }
-]
+{
+  "excludeNullsec": false,
+  "comparisonRegion": "10000002",
+  "openFile": true,
+  "items": [
+    {
+      "name": "Enriched Uranium",
+      "id": "44"
+    },
+    {
+      "name": "Oxygen",
+      "id": "3683"
+    },
+    {
+      "name": "Mechanical Parts",
+      "id": "3689"
+    },
+  ]
+}
 ```
 
 ## Example file output
-|  "item_id"| "name"" | ""volume_entered"" | ""volume_remain"" | ""price"" | ""region"" | ""station"
-|-----------|---------|--------------------|-------------------|-----------|------------|-----------|
-| 16638"| ""Titanium""| "139"| "139"| "3000"| ""Great Wildlands""| ""N-6Z8B - Alpha Paradiso Free Trade Zone"
-| 16638"| ""Titanium""| "2267"| "2267"| "6000"| ""Syndicate""| ""EF-F36 III - Moon 1 - Intaki Space Police Logistic Support"
-| 16638"| ""Titanium""| "5000"| "5000"| "6450"| ""Syndicate""| ""I0AB-R VI - Intaki Space Police Assembly Plant"
-| 16638"| ""Titanium""| "8535"| "8535"| "6599"| ""Kor-Azor""| ""Fensi VII - Moon 10 - Zoar and Sons Factory"
-| 16638"| ""Titanium""| "7890"| "7890"| "6700"| ""Devoid""| ""Esescama VIII - Moon 3 - Imperial Armaments Warehouse"
-| 16638"| ""Titanium""| "93135"| "92135"| "6990"| ""The Forge""| ""Perimeter - Tranquility Trading Tower"
+ | name | volume_entered | volume_remain | price | percentage_decrease | potential_profit | average_price | region | station |
+ |------|------|------|------|------|------|------|------|------|
+ | Enriched Uranium | 500 | 500 | 9,001 | 27.71% | 1,725,000 | 12,451 | Kador | Aphend VII - Moon 7 - Carthum Conglomerate Foundry |
+| Enriched Uranium | 4665 | 4665 | 10,000 | 19.69% | 11,433, 915 | 12,451 | Stain | TG-Z23 III - Moon 8 - True Power Logistic Support |
+| Enriched Uranium | 2997 | 2997 | 11,200 | 10.05% | 3,749,247 | 12,451 | Providence | R3-K7K - Bartertown |
+| Enriched Uranium | 140 | 140 | 11,500 | 7.64% | 133,140 | 12,451 | Verge Vendor | Alenia IV - Moon 3 - Quafe Company School |
+| Enriched Uranium | 2230 | 2230 | 11,750 | 5.63% | 1,563,230 | 12,451 | Verge Vendor | Jufvitte IX - Aliastra Warehouse |
