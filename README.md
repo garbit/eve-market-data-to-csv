@@ -18,7 +18,7 @@ You must create an ```import-config.json``` (use the import-config.example.json 
 | excludeNullSec (boolean) | [true, false] | Allows user to exclude / include NullSec stations from the results list |
 | comparisonRegion (string) | Region_id (i.e. 10000002) - https://evemarketer.com/regions/**10000002**/types/28268[String] | Uses region average to create price comparison / average profit / loss available for each item in list |
 | openFile | [true, false] | Opens csv in LibreOffice after each ```npm run start``` command |
-| items (array) | ```{   "name": "item Name", "id": "TypeId" }``` - (i.e. https://evemarketer.com/types/28268) | Specifies which items you wish to query on |
+| items (array) | ```{   "name": "Enriched Uranium", "id": "44" }``` - (i.e. https://evemarketer.com/types/**44**) | Specifies which items you wish to query on |
 
 The file is an array of JSON objects with name, type id:
 ```
