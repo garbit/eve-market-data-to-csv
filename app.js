@@ -115,7 +115,10 @@ async function getMarketDataByTypeId(id) {
         "volume_remain": record.volume_remain,
         "price": record.price,
         "percentage_decrease": pcDecrease,
-        "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
+        "potential_profit": (((averagePrice * record.volume_remain)* 0.975) - (record.price * record.volume_remain)).toFixed(2),
+        // 0.975 is the 2.25% tax with max skills on sales price of immediate sell (i.e. no broker fee),
+        // Old command is below for potential profit if you want to reverse
+        // "potential_profit": ((averagePrice - record.price) * record.volume_remain).toFixed(2),
         "average_price": outputAverage,
         "region": record.region.name,
         "station": record.station.name,
